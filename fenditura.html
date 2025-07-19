@@ -1,57 +1,32 @@
-
 <!DOCTYPE html>
 <html lang="it">
 <head>
   <meta charset="UTF-8">
-  <title>Esperimento della Doppia Fenditura</title>
-  <style>
-    body { background-color: black; color: lime; font-family: monospace; text-align: center; }
-    input, button { margin: 0.5rem; font-size: 1rem; }
-    canvas { background: black; display: block; margin: auto; }
-    .menu-button {
-      background: white; color: black; font-weight: bold;
-      padding: 0.5em 1em; margin-top: 1em; border-radius: 5px;
-    }
-  </style>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Doppia Fenditura</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h1>🧬 <span style="color:lime">Esperimento della Doppia Fenditura</span></h1>
-
-  <label>Numero di Particelle: <input id="n" type="number" value="5000" min="1"></label>
-  <button onclick="startInterference()">▶️ Avvia</button>
-
-  <canvas id="canvas" width="800" height="300"></canvas>
-  <br>
-  <a href="index.html"><button class="menu-button">⬅ Menu Principale</button></a>
-
+  <div class="container">
+    <h2>Esperimento della Doppia Fenditura</h2>
+    <canvas id="fendituraCanvas" width="300" height="200"></canvas>
+    <p>La simulazione mostra una particella (pallina) che attraversa due fenditure, generando un'interferenza come previsto dalla meccanica quantistica. Si basa sul principio di sovrapposizione d'onda e sulla formula di probabilità dell'interferenza: <strong>P(x) = |ψ₁(x) + ψ₂(x)|²</strong>.</p>
+    <a href="index.html" class="button">🔙 Menu Principale</a>
+  </div>
   <script>
-    function startInterference() {
-      const canvas = document.getElementById('canvas');
-      const ctx = canvas.getContext('2d');
-      const n = parseInt(document.getElementById('n').value);
-      const data = new Array(canvas.width).fill(0);
-      let i = 0;
+    const canvas = document.getElementById("fendituraCanvas");
+    const ctx = canvas.getContext("2d");
 
-      function step() {
-        if (i >= n) return;
-        const x = Math.floor(Math.random() * canvas.width);
-        const angle = (x / canvas.width) * Math.PI * 4;
-        const intensity = Math.pow(Math.cos(angle), 2);
-        data[x] += intensity;
-
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        ctx.fillStyle = 'lime';
-        for (let j = 0; j < canvas.width; j++) {
-          const h = Math.min(canvas.height, data[j]);
-          ctx.fillRect(j, canvas.height - h, 1, h);
-        }
-
-        i++;
-        requestAnimationFrame(step);
-      }
-
-      step();
+    function drawParticle() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      const y = Math.random() * canvas.height;
+      ctx.beginPath();
+      ctx.arc(canvas.width / 2, y, 4, 0, Math.PI * 2);
+      ctx.fillStyle = "cyan";
+      ctx.fill();
     }
+
+    setInterval(drawParticle, 600);
   </script>
 </body>
 </html>
