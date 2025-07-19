@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -5,20 +6,68 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Probabilità Quantistica</title>
   <link rel="stylesheet" href="style.css">
+  <style>
+    body {
+      background-color: #000;
+      color: #fff;
+      text-align: center;
+      font-family: sans-serif;
+    }
+    .container {
+      margin-top: 30px;
+    }
+    .ball {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background: #00ffcc;
+      position: absolute;
+      top: 120px;
+      left: 50%;
+      transform: translateX(-50%);
+      transition: left 1s ease;
+    }
+    .result {
+      margin-top: 100px;
+      font-size: 1.5em;
+    }
+    .description {
+      margin-top: 20px;
+      font-style: italic;
+      color: #ccc;
+    }
+    .button {
+      display: inline-block;
+      margin-top: 20px;
+      padding: 10px 20px;
+      background: #00ffcc;
+      color: #000;
+      text-decoration: none;
+      border-radius: 5px;
+    }
+    input[type=range] {
+      width: 80%;
+    }
+  </style>
 </head>
 <body>
   <div class="container">
     <h2>🧬 Probabilità Quantistica</h2>
-    <button onclick="lancia()">🎲 Lancia!</button><br>
-    <label>Probabilità Spin Destra: <span id="probVal">0.5</span></label>
-    <input type="range" id="probSlider" min="0" max="1" step="0.01" value="0.5"><br>
-    <p id="esito">Esito: </p>
+    <div class="ball" id="ball"></div>
+    <p class="description">La pallina rappresenta la proiezione del momento angolare di spin, visualizzato come una decisione binaria simulata tramite una funzione di probabilità.</p>
+    <p>Probabilità Spin Destra: <span id="probVal">0.5</span></p>
+    <input type="range" id="probSlider" min="0" max="1" step="0.01" value="0.5">
+    <br>
+    <button onclick="lancia()">🎲 Lancia!</button>
+    <p class="result" id="esito">Esito:</p>
     <a href="index.html" class="button">🔙 Menu Principale</a>
   </div>
+
   <script>
     const slider = document.getElementById("probSlider");
     const val = document.getElementById("probVal");
     const esito = document.getElementById("esito");
+    const ball = document.getElementById("ball");
 
     slider.oninput = function () {
       val.textContent = this.value;
@@ -27,8 +76,11 @@
     function lancia() {
       const p = parseFloat(slider.value);
       const rand = Math.random();
-      const risultato = rand < p ? "Spin Destra" : "Spin Sinistra";
-      esito.textContent = "Esito: " + risultato;
+      const right = rand < p;
+      ball.style.left = right ? "75%" : "25%";
+      setTimeout(() => {
+        esito.textContent = "Esito: Spin " + (right ? "Destra" : "Sinistra");
+      }, 1000);
     }
   </script>
 </body>
