@@ -1,22 +1,80 @@
+
 <!DOCTYPE html>
 <html lang="it">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Ruota Quantistica</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="style.css">
+  <style>
+    body {
+      background-color: #000;
+      color: #fff;
+      font-family: 'Courier New', monospace;
+      text-align: center;
+      padding: 20px;
+    }
+    canvas {
+      background-color: #000;
+      margin: 20px auto;
+      display: block;
+    }
+    input, button {
+      font-family: 'Courier New', monospace;
+      font-size: 16px;
+      margin: 5px;
+      padding: 5px;
+    }
+  </style>
 </head>
 <body>
-  <h1>Ruota Quantistica</h1>
-  <canvas id="wheelCanvas" width="200" height="200"></canvas>
-  <br>
-  <button onclick="spinWheel()">Lancia Spin</button>
-  <p id="resultText">Risultato: —</p>
-  <p class="descrizione">
-    Questa simulazione rappresenta lo spin di una particella come una ruota che ruota e si ferma su "Up" o "Down", 
-    modellando la quantizzazione dello spin osservata negli esperimenti di Stern–Gerlach.
-  </p>
-  <a class="button" href="index.html">⬅ Menu Principale</a>
-  <script src="wheel.js"></script>
+  <h1>🎡 Ruota Quantistica</h1>
+  <label>Probabilità di Spin Up (0-1): <input type="number" id="probInput" value="0.5" min="0" max="1" step="0.01"></label>
+  <button onclick="lanciaRuota()">🎲 Lancia Ruota</button>
+  <canvas id="ruotaCanvas" width="200" height="200"></canvas>
+  <p id="risultato">Risultato: ?</p>
+  <button onclick="location.href='index.html'">⬅ Menu Principale</button>
+
+  <script>
+    const canvas = document.getElementById('ruotaCanvas');
+    const ctx = canvas.getContext('2d');
+    const risultatoEl = document.getElementById('risultato');
+
+    function disegnaRuota(angle = 0) {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.save();
+      ctx.translate(100, 100);
+      ctx.rotate(angle);
+      ctx.beginPath();
+      ctx.fillStyle = '#0f0';
+      ctx.moveTo(0, 0);
+      ctx.arc(0, 0, 100, 0, Math.PI);
+      ctx.fill();
+      ctx.beginPath();
+      ctx.fillStyle = '#f0f';
+      ctx.moveTo(0, 0);
+      ctx.arc(0, 0, 100, Math.PI, 2 * Math.PI);
+      ctx.fill();
+      ctx.restore();
+    }
+
+    function lanciaRuota() {
+      const probUp = parseFloat(document.getElementById('probInput').value);
+      let angle = 0;
+      let step = 0;
+      const targetAngle = Math.random() * 10 + 10;
+      const interval = setInterval(() => {
+        angle += 0.2;
+        disegnaRuota(angle);
+        step += 0.2;
+        if (step >= targetAngle) {
+          clearInterval(interval);
+          const risultato = Math.random() < probUp ? 'Spin Up' : 'Spin Down';
+          risultatoEl.textContent = "Risultato: " + risultato;
+        }
+      }, 30);
+    }
+
+    disegnaRuota();
+  </script>
 </body>
 </html>

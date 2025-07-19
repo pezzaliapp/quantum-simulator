@@ -1,16 +1,63 @@
+
 <!DOCTYPE html>
 <html lang="it">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Probabilità Quantistica</title>
-  <link rel="stylesheet" href="style.css" />
-  <script src="probabilita.js" defer></script>
+  <style>
+    body {
+      background-color: black;
+      color: lime;
+      font-family: 'Courier New', monospace;
+      text-align: center;
+    }
+    canvas {
+      border: 1px solid lime;
+      margin-top: 20px;
+      background-color: black;
+    }
+    input, button {
+      margin: 5px;
+      font-size: 16px;
+      padding: 5px;
+      font-family: 'Courier New', monospace;
+    }
+  </style>
 </head>
 <body>
-  <h1>Probabilità Quantistica</h1>
-  <canvas id="probCanvas" width="200" height="300"></canvas>
-  <p>Una rappresentazione visuale dell'evoluzione della funzione d'onda in termini di probabilità: un'animazione in stile 'pallina quantistica' che simula il collasso.</p>
-  <a href="index.html" class="button">🔙 Menu Principale</a>
+  <h1>☢ Probabilità Quantistica</h1>
+  <label>Probabilità iniziale (0-1): <input id="prob" type="number" value="0.5" min="0" max="1" step="0.01"></label>
+  <label>Ampiezza: <input id="ampiezza" type="number" value="1.0" step="0.1"></label>
+  <label>ψ(x): <input id="funzione" type="text" value="Math.cos(x)"></label>
+  <button onclick="simula()">▶ Avvia Simulazione</button>
+  <canvas id="canvas" width="600" height="200"></canvas><br>
+  <button onclick="location.href='index.html'">⬅ Menu Principale</button>
+  <script>
+    function simula() {
+      const canvas = document.getElementById("canvas");
+      const ctx = canvas.getContext("2d");
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      const prob = parseFloat(document.getElementById("prob").value);
+      const amp = parseFloat(document.getElementById("ampiezza").value);
+      const fx = document.getElementById("funzione").value;
+
+      let x = 0;
+      ctx.fillStyle = "lime";
+      const animate = () => {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.beginPath();
+        for (let i = 0; i < canvas.width; i++) {
+          const y = Math.pow(eval(fx.replace(/x/g, (i/50 + x).toFixed(2))), 2) * amp;
+          ctx.lineTo(i, canvas.height - y * 50);
+        }
+        ctx.stroke();
+        x += 0.1;
+        requestAnimationFrame(animate);
+      };
+      animate();
+    }
+  </script>
 </body>
 </html>
