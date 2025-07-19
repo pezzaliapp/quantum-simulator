@@ -1,0 +1,132 @@
+
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <title>Probabilità Quantistica</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      background: #111;
+      color: #fff;
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 20px;
+    }
+    #chartContainer {
+      width: 90%;
+      margin: 0 auto;
+    }
+    canvas {
+      margin-top: 20px;
+    }
+    #particle {
+      width: 15px;
+      height: 15px;
+      border-radius: 50%;
+      background-color: #0ff;
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      display: none;
+    }
+    #status {
+      margin-top: 20px;
+      font-style: italic;
+      color: #0ff;
+    }
+    .info {
+      font-size: 0.9em;
+      color: #aaa;
+      margin-top: 30px;
+      padding: 10px;
+      border-top: 1px solid #444;
+    }
+  </style>
+</head>
+<body>
+  <h1>🧪 Probabilità Quantistica</h1>
+  <button id="launchBtn">🎲 Lancia!</button>
+  <br><br>
+  <label for="probSlider">Probabilità Spin Destra: <span id="probValue">0.5</span></label>
+  <input type="range" id="probSlider" min="0" max="1" step="0.01" value="0.5">
+  <h2 id="resultText">Esito: -</h2>
+
+  <div id="particle"></div>
+  <div id="status"></div>
+
+  <div id="chartContainer">
+    <canvas id="myChart"></canvas>
+  </div>
+
+  <div class="info">
+    <strong>Descrizione:</strong><br>
+    La particella rappresenta uno stato quantistico che, durante l’osservazione, collassa in uno dei due possibili esiti: spin destra o sinistra. <br>
+    L’animazione rappresenta l’interazione con l’apparato di misura e il processo di osservazione secondo il principio del collasso della funzione d’onda.<br><br>
+    <strong>Formula:</strong><br>
+    P(Spin Destra) = θ  P(Spin Sinistra) = 1 − θ<br>
+    Generazione casuale: r ∈ [0,1]<br>
+    Se r ≤ θ → Spin Destra Altrimenti → Spin Sinistra
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    const ctx = document.getElementById('myChart').getContext('2d');
+    const resultText = document.getElementById('resultText');
+    const particle = document.getElementById('particle');
+    const status = document.getElementById('status');
+    const probSlider = document.getElementById('probSlider');
+    const probValue = document.getElementById('probValue');
+
+    let counts = [0, 0]; // [destra, sinistra]
+    const chart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: ['Spin Destra', 'Spin Sinistra'],
+        datasets: [{
+          label: 'Frequenza',
+          data: counts,
+          backgroundColor: ['#00ffc8', '#ff0077']
+        }]
+      },
+      options: {
+        responsive: true,
+        scales: {
+          y: { beginAtZero: true }
+        }
+      }
+    });
+
+    probSlider.addEventListener('input', () => {
+      probValue.textContent = probSlider.value;
+    });
+
+    document.getElementById('launchBtn').addEventListener('click', () => {
+      const theta = parseFloat(probSlider.value);
+      const r = Math.random();
+
+      particle.style.top = '80%';
+      particle.style.display = 'block';
+      status.textContent = "Osservazione quantistica in corso – Simulazione del collasso della funzione d'onda";
+
+      let pos = 80;
+      const anim = setInterval(() => {
+        pos -= 1;
+        particle.style.top = pos + '%';
+        if (pos <= 20) {
+          clearInterval(anim);
+          particle.style.display = 'none';
+          status.textContent = "";
+
+          const esito = r <= theta ? "Spin Destra" : "Spin Sinistra";
+          resultText.textContent = `Esito: ${esito}`;
+          if (esito === "Spin Destra") counts[0]++;
+          else counts[1]++;
+          chart.data.datasets[0].data = counts;
+          chart.update();
+        }
+      }, 10);
+    });
+  </script>
+</body>
+</html>
