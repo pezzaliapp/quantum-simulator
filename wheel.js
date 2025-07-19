@@ -1,60 +1,51 @@
+const canvas = document.getElementById("ruota");
+const ctx = canvas.getContext("2d");
+const risultato = document.getElementById("risultato");
 
-let canvas = document.getElementById("quantumWheel");
-let ctx = canvas.getContext("2d");
-let angle = 0;
+let angolo = 0;
 let spinning = false;
 
-function drawWheel(currentAngle) {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.beginPath();
-    ctx.moveTo(150, 150);
-    ctx.arc(150, 150, 150, 0, Math.PI, false);
-    ctx.fillStyle = "magenta";
-    ctx.fill();
+function disegnaRuota() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  const centroX = canvas.width / 2;
+  const centroY = canvas.height / 2;
+  const raggio = 100;
 
-    ctx.beginPath();
-    ctx.moveTo(150, 150);
-    ctx.arc(150, 150, 150, Math.PI, Math.PI * 2, false);
-    ctx.fillStyle = "lime";
-    ctx.fill();
+  // Spin Up
+  ctx.beginPath();
+  ctx.moveTo(centroX, centroY);
+  ctx.arc(centroX, centroY, raggio, 0 + angolo, Math.PI + angolo);
+  ctx.closePath();
+  ctx.fillStyle = "magenta";
+  ctx.fill();
 
-    // draw pointer
-    ctx.beginPath();
-    ctx.moveTo(150, 0);
-    ctx.lineTo(145, 20);
-    ctx.lineTo(155, 20);
-    ctx.closePath();
-    ctx.fillStyle = "white";
-    ctx.fill();
-
-    ctx.save();
-    ctx.translate(150, 150);
-    ctx.rotate(currentAngle);
-    ctx.restore();
+  // Spin Down
+  ctx.beginPath();
+  ctx.moveTo(centroX, centroY);
+  ctx.arc(centroX, centroY, raggio, Math.PI + angolo, 2 * Math.PI + angolo);
+  ctx.closePath();
+  ctx.fillStyle = "lime";
+  ctx.fill();
 }
 
-function spinWheel() {
-    if (spinning) return;
-    spinning = true;
-    let start = Date.now();
-    let duration = 2000;
-    let resultText = document.getElementById("risultato");
+function lanciaSpin() {
+  if (spinning) return;
+  spinning = true;
+  let velocità = 0.2 + Math.random() * 0.1;
+  let decelerazione = 0.005;
 
-    function animate() {
-        let now = Date.now();
-        let elapsed = now - start;
-        angle += 0.2;
-        drawWheel(angle);
-        if (elapsed < duration) {
-            requestAnimationFrame(animate);
-        } else {
-            let outcome = Math.random() < 0.5 ? "Spin Up" : "Spin Down";
-            resultText.textContent = "Risultato: " + outcome;
-            spinning = false;
-        }
+  const intervallo = setInterval(() => {
+    angolo += velocità;
+    velocità -= decelerazione;
+    disegnaRuota();
+
+    if (velocità <= 0) {
+      clearInterval(intervallo);
+      spinning = false;
+      const esito = Math.sin(angolo % (2 * Math.PI)) > 0 ? "Spin Up" : "Spin Down";
+      risultato.textContent = "Risultato: " + esito;
     }
-
-    animate();
+  }, 20);
 }
 
-drawWheel(angle);
+disegnaRuota();

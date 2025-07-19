@@ -1,10 +1,25 @@
-
 body {
   background-color: #111;
   color: white;
   font-family: monospace;
   text-align: center;
+  margin: 0;
+  padding: 0;
 }
-canvas {
-  margin-top: 20px;
+.container {
+  padding: 20px;
+}
+.btn {
+  margin: 10px;
+  padding: 10px 20px;
+  font-size: 16px;
+  background: white;
+  color: black;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.back {
+  background-color: gray;
+  color: white;
 }
