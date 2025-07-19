@@ -4,19 +4,21 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Simulatore Quantistico</title>
+  <title>QuantumLab</title>
   <link rel="stylesheet" href="style.css" />
+  <link rel="manifest" href="manifest.json" />
 </head>
 <body>
-  <h1>Simulatore Quantistico</h1>
-  <p>Scegli un esperimento:</p>
-  <select id="simSelect" onchange="changeSimulation()">
-    <option value="doubleSlit">Doppia Fenditura</option>
-    <option value="spinWheel">Ruota Quantistica</option>
-    <option value="probability">Probabilità Quantistica</option>
-  </select>
-  <div id="simContainer"></div>
-
-  <script src="simulatore.js"></script>
+  <header>
+    <h1>QuantumLab – Simulatore Quantistico</h1>
+    <p>Esplora esperimenti interattivi: doppia fenditura, ruota quantistica, probabilità quantistica.</p>
+    <nav>
+      <button onclick="loadExperiment('doubleSlit')">Doppia Fenditura</button>
+      <button onclick="loadExperiment('spinWheel')">Ruota Quantistica</button>
+      <button onclick="loadExperiment('probability')">Probabilità</button>
+    </nav>
+  </header>
+  <main id="experimentArea"></main>
+  <script src="app.js"></script>
 </body>
 </html>
