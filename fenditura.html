@@ -1,55 +1,46 @@
-<!DOCTYPE html>
 
+<!DOCTYPE html>
 <html lang="it">
 <head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Doppia Fenditura</title>
-<link href="style.css" rel="stylesheet"/>
+    <meta charset="UTF-8">
+    <title>Esperimento della Doppia Fenditura</title>
+    <style>
+        body {
+            background-color: black;
+            color: white;
+            font-family: monospace;
+            text-align: center;
+        }
+        canvas {
+            background: black;
+            display: block;
+            margin: 20px auto;
+        }
+    </style>
 </head>
 <body>
-<div class="container">
-<h2>Esperimento della Doppia Fenditura</h2>
-<div style="margin-bottom: 1em;">
-<label for="particleCount">Numero particelle (es. 1000): </label>
-<input id="particleCount" max="10000" min="100" step="100" type="number" value="1000"/>
-<label for="slitDistance">Distanza tra fenditure (es. 10): </label>
-<input id="slitDistance" max="50" min="1" step="1" type="number" value="10"/>
-<label for="wavelength">Lunghezza d’onda (es. 5): </label>
-<input id="wavelength" max="100" min="1" step="1" type="number" value="5"/>
-<button onclick="lanciaFenditura()">▶ Lancia Esperimento</button>
-</div><canvas height="200" id="fendituraCanvas" width="300"></canvas>
-<p>La simulazione mostra una particella (pallina) che attraversa due fenditure, generando un'interferenza come previsto dalla meccanica quantistica. Si basa sul principio di sovrapposizione d'onda e sulla formula di probabilità dell'interferenza: <strong>P(x) = |ψ₁(x) + ψ₂(x)|²</strong>.</p>
-<a class="button" href="index.html">🔙 Menu Principale</a>
-</div>
-<script>function getUserInputs() {
-  const count = parseInt(document.getElementById('particleCount').value);
-  const distance = parseFloat(document.getElementById('slitDistance').value);
-  const wavelength = parseFloat(document.getElementById('wavelength').value);
-  return { count, distance, wavelength };
-}
+    <h1>🌌 Esperimento della Doppia Fenditura</h1>
+    <label>Numero di Particelle: <input type="number" id="num" value="1000"></label>
+    <button onclick="simula()">▶️ Avvia</button>
+    <canvas id="canvas" width="600" height="300"></canvas>
+    <button onclick="window.location.href='index.html'">⬅️ Menu Principale</button>
+    <script>
+        const canvas = document.getElementById("canvas");
+        const ctx = canvas.getContext("2d");
 
-function lanciaFenditura() {
-  const { count, distance, wavelength } = getUserInputs();
-  // Simula esperimento con questi parametri
-  console.log('Lancio esperimento con:', count, distance, wavelength);
-  // TODO: Inserire simulazione reale qui
-}
-
-
-    const canvas = document.getElementById("fendituraCanvas");
-    const ctx = canvas.getContext("2d");
-
-    function drawParticle() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      const y = Math.random() * canvas.height;
-      ctx.beginPath();
-      ctx.arc(canvas.width / 2, y, 4, 0, Math.PI * 2);
-      ctx.fillStyle = "cyan";
-      ctx.fill();
-    }
-
-    setInterval(drawParticle, 600);
-  </script>
+        function simula() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            const num = parseInt(document.getElementById("num").value);
+            const heights = Array(canvas.width).fill(0);
+            for (let i = 0; i < num; i++) {
+                const x = Math.floor(canvas.width / 2 + Math.sin(i) * 200 * Math.sin(i / 10));
+                if (x >= 0 && x < canvas.width) heights[x]++;
+            }
+            ctx.fillStyle = "lime";
+            for (let x = 0; x < canvas.width; x++) {
+                ctx.fillRect(x, canvas.height, 1, -heights[x]);
+            }
+        }
+    </script>
 </body>
 </html>
