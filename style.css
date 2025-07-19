@@ -31,3 +31,8 @@ canvas {
   50% { transform: scale(1.1); opacity: 0.8; }
   100% { transform: scale(1); opacity: 0.4; }
 }
+
+@keyframes spinTrail {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
