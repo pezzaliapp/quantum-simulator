@@ -1,94 +1,18 @@
+
 <!DOCTYPE html>
 <html lang="it">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Ruota Quantistica</title>
-  <style>
-    body { background: #111; color: white; font-family: monospace; text-align: center; padding-top: 50px; }
-    canvas { background: black; margin-bottom: 20px; }
-    #result { font-size: 24px; margin-top: 20px; }
-    button { padding: 10px 20px; font-size: 16px; }
-  </style>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <h1>Ruota Quantistica</h1>
-  <canvas id="wheelCanvas" width="200" height="200"></canvas>
-  <div>
-    <button onclick="spin()">Lancia Spin</button>
-  </div>
-  <div id="result"></div>
-  <p>Questa simulazione rappresenta lo spin di una particella come una ruota che ruota e si ferma su "Up" o "Down", 
-  modellando la quantizzazione dello spin osservata negli esperimenti di Stern–Gerlach.</p>
-  <a href="index.html"><button>🔙 Menu Principale</button></a>
-
-  <script>
-    const canvas = document.getElementById("wheelCanvas");
-    const ctx = canvas.getContext("2d");
-    const radius = canvas.width / 2;
-    let angle = 0;
-    let spinning = false;
-
-    function drawWheel() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-      // Draw sectors
-      ctx.beginPath();
-      ctx.moveTo(radius, radius);
-      ctx.arc(radius, radius, radius, 0, Math.PI, false); // upper half
-      ctx.fillStyle = "#00FF00";
-      ctx.fill();
-
-      ctx.beginPath();
-      ctx.moveTo(radius, radius);
-      ctx.arc(radius, radius, radius, Math.PI, 2 * Math.PI, false); // lower half
-      ctx.fillStyle = "#FF00FF";
-      ctx.fill();
-
-      // Pointer
-      ctx.beginPath();
-      ctx.moveTo(radius - 5, 0);
-      ctx.lineTo(radius + 5, 0);
-      ctx.lineTo(radius, 20);
-      ctx.fillStyle = "#FFF";
-      ctx.fill();
-
-      ctx.save();
-      ctx.translate(radius, radius);
-      ctx.rotate(angle);
-      ctx.translate(-radius, -radius);
-      ctx.restore();
-    }
-
-    function spin() {
-      if (spinning) return;
-      spinning = true;
-      let start = Date.now();
-      const duration = 2000;
-      const startAngle = Math.random() * 2 * Math.PI;
-      const finalAngle = startAngle + 8 * Math.PI;
-
-      const interval = setInterval(() => {
-        let now = Date.now();
-        let elapsed = now - start;
-        let t = elapsed / duration;
-        if (t >= 1) {
-          clearInterval(interval);
-          angle = finalAngle % (2 * Math.PI);
-          const result = (angle % (2 * Math.PI)) < Math.PI ? "Spin Up" : "Spin Down";
-          document.getElementById("result").innerText = `Risultato: ${result}`;
-          spinning = false;
-        } else {
-          angle = startAngle + (finalAngle - startAngle) * easeOut(t);
-          drawWheel();
-        }
-      }, 16);
-    }
-
-    function easeOut(t) {
-      return 1 - Math.pow(1 - t, 3);
-    }
-
-    drawWheel();
-  </script>
+  <h2>Ruota Quantistica</h2>
+  <canvas id="quantumWheel" width="300" height="300"></canvas>
+  <br />
+  <button onclick="spinWheel()">Lancia Spin</button>
+  <p id="risultato"></p>
+  <script src="wheel.js"></script>
 </body>
 </html>
