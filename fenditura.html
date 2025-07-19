@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Doppia Fenditura</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <h2>Esperimento della Doppia Fenditura</h2>
+    <canvas id="fendituraCanvas" width="300" height="200"></canvas>
+    <p>La simulazione mostra una particella (pallina) che attraversa due fenditure, generando un'interferenza come previsto dalla meccanica quantistica. Si basa sul principio di sovrapposizione d'onda e sulla formula di probabilità dell'interferenza: <strong>P(x) = |ψ₁(x) + ψ₂(x)|²</strong>.</p>
+    <a href="index.html" class="button">🔙 Menu Principale</a>
+  </div>
+  <script>
+    const canvas = document.getElementById("fendituraCanvas");
+    const ctx = canvas.getContext("2d");
+
+    function drawParticle() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      const y = Math.random() * canvas.height;
+      ctx.beginPath();
+      ctx.arc(canvas.width / 2, y, 4, 0, Math.PI * 2);
+      ctx.fillStyle = "cyan";
+      ctx.fill();
+    }
+
+    setInterval(drawParticle, 600);
+  </script>
+</body>
+</html>

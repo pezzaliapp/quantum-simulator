@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ruota Quantistica</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <h2>Ruota Quantistica</h2>
+    <canvas id="spinCanvas" width="200" height="200"></canvas>
+    <p>Questa simulazione rappresenta lo spin di una particella come una ruota che ruota e si ferma su "Up" o "Down", modellando la quantizzazione dello spin osservata negli esperimenti di Stern-Gerlach.</p>
+    <a href="index.html" class="button">🔙 Menu Principale</a>
+  </div>
+  <script>
+    const canvas = document.getElementById("spinCanvas");
+    const ctx = canvas.getContext("2d");
+    let angle = 0;
+
+    function drawWheel() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.save();
+      ctx.translate(100, 100);
+      ctx.rotate(angle);
+      ctx.beginPath();
+      ctx.arc(0, 0, 80, 0, Math.PI);
+      ctx.fillStyle = "magenta";
+      ctx.fill();
+      ctx.beginPath();
+      ctx.arc(0, 0, 80, Math.PI, 2 * Math.PI);
+      ctx.fillStyle = "lime";
+      ctx.fill();
+      ctx.restore();
+      angle += 0.2;
+    }
+
+    setInterval(drawWheel, 100);
+  </script>
+</body>
+</html>

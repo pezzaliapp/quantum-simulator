@@ -1,39 +1,27 @@
+
 body {
-  font-family: system-ui, sans-serif;
-  background: #f0f0f0;
-  margin: 0;
-  padding: 0;
-}
-.header {
+  font-family: 'Courier New', monospace;
   background: #111;
   color: white;
+  margin: 0;
+  padding: 0;
   text-align: center;
-  padding: 2em 1em;
 }
-.buttons {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1em;
-  margin-top: 2em;
-}
-button {
-  font-size: 1.1em;
+.container {
   padding: 1em;
-  border: none;
-  border-radius: 8px;
-  background: #222;
-  color: white;
-  cursor: pointer;
-  width: 90%;
-  max-width: 400px;
-  transition: background 0.3s;
 }
-button:hover {
-  background: #444;
-}
-small {
+.button {
   display: block;
-  font-size: 0.8em;
-  color: #ccc;
+  margin: 1em auto;
+  padding: 0.5em 1em;
+  background-color: #444;
+  color: white;
+  text-decoration: none;
+  border-radius: 6px;
+}
+canvas {
+  background: #222;
+  border: 1px solid #555;
+  margin: 1em auto;
+  display: block;
 }
