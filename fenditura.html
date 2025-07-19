@@ -4,67 +4,63 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Doppia Fenditura</title>
+  <title>Doppia Fenditura - Animata</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
-      background-color: black;
+      background: black;
       color: cyan;
+      font-family: Arial, sans-serif;
       text-align: center;
       margin: 0;
       padding: 0;
     }
     canvas {
-      margin-top: 10px;
       border: 1px solid cyan;
+      margin-top: 10px;
     }
-    input {
-      margin: 5px;
+    input, button {
+      margin: 4px;
       padding: 5px;
       font-size: 16px;
-      width: 80px;
     }
-    button {
-      padding: 10px;
-      font-size: 16px;
-      background: cyan;
-      color: black;
-      border: none;
-      cursor: pointer;
+    a {
+      color: cyan;
+      display: block;
+      margin-top: 10px;
     }
   </style>
 </head>
 <body>
-  <h2>Simulazione Doppia Fenditura</h2>
+  <h2>Simulazione Animata Doppia Fenditura</h2>
   <div>
-    <label>Distanza fenditure (d):</label><input type="number" id="d" value="100">
-    <label>Lunghezza d’onda (λ):</label><input type="number" id="lambda" value="20">
-    <label>Distanza schermo (L):</label><input type="number" id="L" value="300">
-    <button onclick="disegna()">Avvia</button>
+    <label>d (fenditure):</label><input type="number" id="d" value="100">
+    <label>λ (lunghezza d’onda):</label><input type="number" id="lambda" value="20">
+    <label>L (schermo):</label><input type="number" id="L" value="300">
+    <button onclick="startAnim()">Lancia</button>
   </div>
   <canvas id="canvas" width="600" height="300"></canvas>
-  <p><a href="index.html" style="color: cyan;">⇦ Menu Principale</a></p>
+  <a href="index.html">⇦ Menu Principale</a>
+
   <script>
     const canvas = document.getElementById("canvas");
     const ctx = canvas.getContext("2d");
 
-    function interferenza(x, d, lambda, L) {
+    function interferenza(x, d, lambda, L, fase) {
       const pi = Math.PI;
       const theta = Math.atan((x - canvas.width / 2) / L);
       const delta = d * Math.sin(theta);
-      return Math.cos((2 * pi * delta) / lambda);
+      return Math.cos((2 * pi * delta + fase) / lambda);
     }
 
-    function disegna() {
-      const d = parseFloat(document.getElementById("d").value);
-      const lambda = parseFloat(document.getElementById("lambda").value);
-      const L = parseFloat(document.getElementById("L").value);
+    let fase = 0;
+    let animID;
 
+    function disegnaFrame(d, lambda, L) {
       ctx.fillStyle = "black";
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
       for (let x = 0; x < canvas.width; x++) {
-        const I = Math.pow(interferenza(x, d, lambda, L), 2);
+        const I = Math.pow(interferenza(x, d, lambda, L, fase), 2);
         const h = I * canvas.height;
         ctx.beginPath();
         ctx.moveTo(x, canvas.height);
@@ -74,8 +70,24 @@
       }
     }
 
-    // Disegno iniziale
-    disegna();
+    function animazione() {
+      const d = parseFloat(document.getElementById("d").value);
+      const lambda = parseFloat(document.getElementById("lambda").value);
+      const L = parseFloat(document.getElementById("L").value);
+
+      fase += 0.5;
+      disegnaFrame(d, lambda, L);
+      animID = requestAnimationFrame(animazione);
+    }
+
+    function startAnim() {
+      cancelAnimationFrame(animID);
+      fase = 0;
+      animazione();
+    }
+
+    // Disegno statico iniziale
+    disegnaFrame(100, 20, 300);
   </script>
 </body>
 </html>
