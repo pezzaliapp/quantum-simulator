@@ -1,32 +1,81 @@
+
 <!DOCTYPE html>
 <html lang="it">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Doppia Fenditura</title>
-  <link rel="stylesheet" href="style.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: black;
+      color: cyan;
+      text-align: center;
+      margin: 0;
+      padding: 0;
+    }
+    canvas {
+      margin-top: 10px;
+      border: 1px solid cyan;
+    }
+    input {
+      margin: 5px;
+      padding: 5px;
+      font-size: 16px;
+      width: 80px;
+    }
+    button {
+      padding: 10px;
+      font-size: 16px;
+      background: cyan;
+      color: black;
+      border: none;
+      cursor: pointer;
+    }
+  </style>
 </head>
 <body>
-  <div class="container">
-    <h2>Esperimento della Doppia Fenditura</h2>
-    <canvas id="fendituraCanvas" width="300" height="200"></canvas>
-    <p>La simulazione mostra una particella (pallina) che attraversa due fenditure, generando un'interferenza come previsto dalla meccanica quantistica. Si basa sul principio di sovrapposizione d'onda e sulla formula di probabilità dell'interferenza: <strong>P(x) = |ψ₁(x) + ψ₂(x)|²</strong>.</p>
-    <a href="index.html" class="button">🔙 Menu Principale</a>
+  <h2>Simulazione Doppia Fenditura</h2>
+  <div>
+    <label>Distanza fenditure (d):</label><input type="number" id="d" value="100">
+    <label>Lunghezza d’onda (λ):</label><input type="number" id="lambda" value="20">
+    <label>Distanza schermo (L):</label><input type="number" id="L" value="300">
+    <button onclick="disegna()">Avvia</button>
   </div>
+  <canvas id="canvas" width="600" height="300"></canvas>
+  <p><a href="index.html" style="color: cyan;">⇦ Menu Principale</a></p>
   <script>
-    const canvas = document.getElementById("fendituraCanvas");
+    const canvas = document.getElementById("canvas");
     const ctx = canvas.getContext("2d");
 
-    function drawParticle() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      const y = Math.random() * canvas.height;
-      ctx.beginPath();
-      ctx.arc(canvas.width / 2, y, 4, 0, Math.PI * 2);
-      ctx.fillStyle = "cyan";
-      ctx.fill();
+    function interferenza(x, d, lambda, L) {
+      const pi = Math.PI;
+      const theta = Math.atan((x - canvas.width / 2) / L);
+      const delta = d * Math.sin(theta);
+      return Math.cos((2 * pi * delta) / lambda);
     }
 
-    setInterval(drawParticle, 600);
+    function disegna() {
+      const d = parseFloat(document.getElementById("d").value);
+      const lambda = parseFloat(document.getElementById("lambda").value);
+      const L = parseFloat(document.getElementById("L").value);
+
+      ctx.fillStyle = "black";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      for (let x = 0; x < canvas.width; x++) {
+        const I = Math.pow(interferenza(x, d, lambda, L), 2);
+        const h = I * canvas.height;
+        ctx.beginPath();
+        ctx.moveTo(x, canvas.height);
+        ctx.lineTo(x, canvas.height - h);
+        ctx.strokeStyle = `rgba(0,255,255,${I})`;
+        ctx.stroke();
+      }
+    }
+
+    // Disegno iniziale
+    disegna();
   </script>
 </body>
 </html>
