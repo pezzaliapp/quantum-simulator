@@ -27,79 +27,7 @@ function loadExperiment(type) {
   }
 
   if (type === "spinWheel") {
-    const wrapper = document.createElement("div");
-    wrapper.style.width = "200px";
-    wrapper.style.height = "200px";
-    wrapper.style.margin = "40px auto";
-    wrapper.style.position = "relative";
-
-    const glow = document.createElement("div");
-    glow.style.width = "220px";
-    glow.style.height = "220px";
-    glow.style.borderRadius = "50%";
-    glow.style.background = "radial-gradient(circle, rgba(0,255,255,0.2) 0%, rgba(0,255,255,0) 70%)";
-    glow.style.position = "absolute";
-    glow.style.top = "-10px";
-    glow.style.left = "-10px";
-    glow.style.zIndex = "0";
-    glow.style.animation = "pulseGlow 2s infinite";
-
-    const wheel = document.createElement("div");
-    wheel.style.width = "100%";
-    wheel.style.height = "100%";
-    wheel.style.border = "10px solid #4CAF50";
-    wheel.style.borderRadius = "50%";
-    wheel.style.position = "absolute";
-    wheel.style.transition = "transform 0.1s linear";
-    wheel.style.zIndex = "1";
-
-    const arrow = document.createElement("div");
-    arrow.style.width = "0";
-    arrow.style.height = "0";
-    arrow.style.borderLeft = "10px solid transparent";
-    arrow.style.borderRight = "10px solid transparent";
-    arrow.style.borderBottom = "20px solid #000";
-    arrow.style.position = "absolute";
-    arrow.style.top = "-30px";
-    arrow.style.left = "calc(50% - 10px)";
-    arrow.style.zIndex = "2";
-
-    const directionLabel = document.createElement("p");
-    directionLabel.style.textAlign = "center";
-    directionLabel.style.fontSize = "18px";
-    directionLabel.style.fontWeight = "bold";
-    directionLabel.style.marginTop = "220px";
-
-    wrapper.appendChild(glow);
-    wrapper.appendChild(wheel);
-    wrapper.appendChild(arrow);
-    area.appendChild(wrapper);
-    area.appendChild(directionLabel);
-
-    let angle = 0;
-    let dir = 1;
-    let speed = 1;
-
-    function updateLabel() {
-      directionLabel.textContent = dir === 1 ? "↻ Direzione: Destra" : "↺ Direzione: Sinistra";
-    }
-
-    function animate() {
-      angle += dir * speed;
-      wheel.style.transform = `rotate(${angle}deg)`;
-      requestAnimationFrame(animate);
-    }
-
-    updateLabel();
-    animate();
-
-    setInterval(() => {
-      if (Math.random() < 0.2) {
-        dir *= -1;
-        updateLabel();
-      }
-      speed = 1 + Math.random() * 4;
-    }, 1500);
+    runSpinWheel(area);
   }
 
   if (type === "probability") {
@@ -138,4 +66,83 @@ function loadExperiment(type) {
     area.appendChild(stateBox);
     area.appendChild(result);
   }
+}
+
+function runSpinWheel(area) {
+  const wrapper = document.createElement("div");
+  wrapper.style.width = "200px";
+  wrapper.style.height = "200px";
+  wrapper.style.margin = "40px auto";
+  wrapper.style.position = "relative";
+
+  const glow = document.createElement("div");
+  glow.style.width = "240px";
+  glow.style.height = "240px";
+  glow.style.borderRadius = "50%";
+  glow.style.background = "rgba(0, 255, 255, 0.2)";
+  glow.style.position = "absolute";
+  glow.style.top = "-20px";
+  glow.style.left = "-20px";
+  glow.style.zIndex = "0";
+  glow.style.boxShadow = "0 0 30px 15px rgba(0, 255, 255, 0.4)";
+  glow.style.filter = "blur(10px)";
+  glow.style.animation = "pulseGlow 2s ease-in-out infinite";
+
+  const wheel = document.createElement("div");
+  wheel.style.width = "100%";
+  wheel.style.height = "100%";
+  wheel.style.border = "10px solid #4CAF50";
+  wheel.style.borderRadius = "50%";
+  wheel.style.position = "absolute";
+  wheel.style.transition = "transform 0.1s linear";
+  wheel.style.zIndex = "1";
+  wheel.style.backgroundColor = "#fff";
+
+  const arrow = document.createElement("div");
+  arrow.style.width = "0";
+  arrow.style.height = "0";
+  arrow.style.borderLeft = "10px solid transparent";
+  arrow.style.borderRight = "10px solid transparent";
+  arrow.style.borderBottom = "20px solid #000";
+  arrow.style.position = "absolute";
+  arrow.style.top = "-30px";
+  arrow.style.left = "calc(50% - 10px)";
+  arrow.style.zIndex = "2";
+
+  const directionLabel = document.createElement("p");
+  directionLabel.style.textAlign = "center";
+  directionLabel.style.fontSize = "18px";
+  directionLabel.style.fontWeight = "bold";
+  directionLabel.style.marginTop = "220px";
+
+  wrapper.appendChild(glow);
+  wrapper.appendChild(wheel);
+  wrapper.appendChild(arrow);
+  area.appendChild(wrapper);
+  area.appendChild(directionLabel);
+
+  let angle = 0;
+  let dir = 1;
+  let speed = 1;
+
+  function updateLabel() {
+    directionLabel.textContent = dir === 1 ? "↻ Direzione: Destra" : "↺ Direzione: Sinistra";
+  }
+
+  function animate() {
+    angle += dir * speed;
+    wheel.style.transform = `rotate(${angle}deg)`;
+    requestAnimationFrame(animate);
+  }
+
+  updateLabel();
+  animate();
+
+  setInterval(() => {
+    if (Math.random() < 0.2) {
+      dir *= -1;
+      updateLabel();
+    }
+    speed = 1 + Math.random() * 4;
+  }, 1500);
 }
