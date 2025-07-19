@@ -1,27 +1,104 @@
-<!DOCTYPE html>
 
+<!DOCTYPE html>
 <html lang="it">
 <head>
-<meta charset="utf-8"/>
-<title>Ruota Quantistica</title>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<link href="style.css" rel="stylesheet"/>
+  <meta charset="UTF-8" />
+  <title>Ruota Quantistica</title>
+  <style>
+    body {
+      font-family: monospace;
+      background-color: #111;
+      color: white;
+      text-align: center;
+      padding-top: 2rem;
+    }
+    canvas {
+      border: 1px solid white;
+      margin-top: 1rem;
+    }
+    input, button {
+      font-family: monospace;
+      margin: 0.5rem;
+      padding: 0.3rem;
+    }
+    #menuBtn {
+      margin-top: 2rem;
+      padding: 0.4rem 1rem;
+      font-size: 1rem;
+    }
+  </style>
 </head>
 <body>
-<h1>Ruota Quantistica</h1>
-<div style="margin-bottom: 1em;">
-<label for="spinProbability">Probabilità di Spin Up (0–1): </label>
-<input id="spinProbability" max="1" min="0" step="0.01" type="number" value="0.5"/>
-<button onclick="avviaRuota()">▶ Lancia Ruota</button>
-</div><canvas height="200" id="wheelCanvas" width="200"></canvas>
-<br/>
-<button onclick="spinWheel()">Lancia Spin</button>
-<p id="resultText">Risultato: —</p>
-<p class="descrizione">
-    Questa simulazione rappresenta lo spin di una particella come una ruota che ruota e si ferma su "Up" o "Down", 
-    modellando la quantizzazione dello spin osservata negli esperimenti di Stern–Gerlach.
-  </p>
-<a class="button" href="index.html">⬅ Menu Principale</a>
-<script src="wheel.js"></script>
+  <h1>🎯 Ruota Quantistica</h1>
+  <label>Probabilità di Spin Up (0-1):</label>
+  <input type="number" id="probInput" value="0.5" min="0" max="1" step="0.01">
+  <button onclick="lanciaRuota()">▶️ Lancia Ruota</button>
+  <br><canvas id="canvas" width="200" height="200"></canvas>
+  <br>
+  <p id="output">Risultato:</p>
+  <p>Questa simulazione rappresenta lo spin di una particella come una ruota che ruota e si ferma su "Up" o "Down", modellando la quantizzazione dello spin osservata negli esperimenti di Stern–Gerlach.</p>
+  <button id="menuBtn" onclick="window.location.href='index.html'">⬅ Menu Principale</button>
+
+  <script>
+    const canvas = document.getElementById("canvas");
+    const ctx = canvas.getContext("2d");
+
+    function drawWheel(probUp) {
+      const angleUp = probUp * 2 * Math.PI;
+      const angleDown = 2 * Math.PI - angleUp;
+
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      // Spin Up = verde
+      ctx.beginPath();
+      ctx.moveTo(100, 100);
+      ctx.fillStyle = "lime";
+      ctx.arc(100, 100, 100, 0, angleUp);
+      ctx.fill();
+
+      // Spin Down = magenta
+      ctx.beginPath();
+      ctx.moveTo(100, 100);
+      ctx.fillStyle = "magenta";
+      ctx.arc(100, 100, 100, angleUp, 2 * Math.PI);
+      ctx.fill();
+    }
+
+    function lanciaRuota() {
+      const probUp = parseFloat(document.getElementById("probInput").value);
+      const spinUp = Math.random() < probUp;
+      const totalFrames = 60;
+      let currentFrame = 0;
+      let angle = 0;
+      let targetAngle = spinUp ? 0 : Math.PI;
+
+      const animate = () => {
+        ctx.save();
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.translate(100, 100);
+        angle += 0.2;
+        ctx.rotate(angle);
+        drawWheel(probUp);
+        ctx.restore();
+
+        currentFrame++;
+        if (currentFrame < totalFrames) {
+          requestAnimationFrame(animate);
+        } else {
+          ctx.save();
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          ctx.translate(100, 100);
+          ctx.rotate(targetAngle);
+          drawWheel(probUp);
+          ctx.restore();
+
+          document.getElementById("output").textContent = "Risultato: Spin " + (spinUp ? "Up" : "Down");
+        }
+      };
+      animate();
+    }
+
+    drawWheel(0.5);
+  </script>
 </body>
 </html>
