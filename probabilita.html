@@ -2,59 +2,60 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-    <meta charset="UTF-8">
-    <title>Probabilità Quantistica</title>
-    <style>
-        body {
-            background-color: black;
-            color: lime;
-            font-family: monospace;
-            text-align: center;
-        }
-        canvas {
-            background-color: black;
-            display: block;
-            margin: auto;
-        }
-        input, button {
-            margin: 10px;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <title>Probabilità Quantistica</title>
+  <style>
+    body { background-color: black; color: lime; font-family: monospace; text-align: center; }
+    input, button { margin: 0.5rem; font-size: 1rem; }
+    canvas { background: black; display: block; margin: auto; }
+    .menu-button {
+      background: white; color: black; font-weight: bold;
+      padding: 0.5em 1em; margin-top: 1em; border-radius: 5px;
+    }
+  </style>
 </head>
 <body>
-    <h1>🧬 Probabilità Quantistica</h1>
-    <label>Probabilità iniziale (0-1): <input type="number" id="p" step="0.01" value="0.56"></label>
-    <label>Ampiezza: <input type="number" id="a" step="0.1" value="1.4"></label>
-    <label>ψ(x): <input type="text" id="fx" value="Math.cos(x)"></label>
-    <button onclick="simula()">▶️ Avvia Simulazione</button>
-    <canvas id="grafico" width="600" height="300"></canvas>
-    <br>
-    <button onclick="window.location.href='index.html'">⬅️ Menu Principale</button>
-    <script>
-        function simula() {
-            const canvas = document.getElementById("grafico");
-            const ctx = canvas.getContext("2d");
-            const amp = parseFloat(document.getElementById("a").value);
-            const fx = document.getElementById("fx").value;
-            const f = new Function("x", "return " + fx + ";");
+  <h1>🧬 <span style="color:lime">Probabilità Quantistica</span></h1>
 
-            let x = 0;
-            const step = 0.05;
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            function draw() {
-                ctx.fillStyle = "black";
-                ctx.fillRect(0, 0, canvas.width, canvas.height);
-                ctx.beginPath();
-                for (let i = 0; i < canvas.width; i++) {
-                    const val = Math.pow(f(x + i * step), 2);
-                    const y = canvas.height - val * amp * 100;
-                    ctx.lineTo(i, y);
-                }
-                ctx.strokeStyle = "lime";
-                ctx.stroke();
-            }
-            draw();
+  <label>Probabilità iniziale (0–1): <input id="prob" type="number" step="0.01" value="0.56" min="0" max="1"></label>
+  <label>Ampiezza: <input id="ampiezza" type="number" step="0.1" value="1.4"></label>
+  <label>ψ(x): <input id="funzione" value="Math.cos(x)"></label>
+  <button onclick="startAnimation()">▶️ Avvia Simulazione</button>
+
+  <canvas id="canvas" width="800" height="300"></canvas>
+  <br>
+  <a href="index.html"><button class="menu-button">⬅ Menu Principale</button></a>
+
+  <script>
+    function startAnimation() {
+      const canvas = document.getElementById('canvas');
+      const ctx = canvas.getContext('2d');
+      const p = parseFloat(document.getElementById('prob').value);
+      const A = parseFloat(document.getElementById('ampiezza').value);
+      const f = document.getElementById('funzione').value;
+      let t = 0;
+
+      function draw() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        for (let x = 0; x < canvas.width; x++) {
+          const fx = x / canvas.width * (Math.PI * 4);
+          let y;
+          try {
+            y = eval(f.replace(/x/g, fx) + ` * ${A}`);
+          } catch {
+            y = 0;
+          }
+          const prob = Math.pow(y, 2) * p;
+          const h = Math.min(canvas.height, prob * canvas.height);
+          ctx.fillStyle = 'lime';
+          ctx.fillRect(x, canvas.height - h, 1, h);
         }
-    </script>
+        t += 0.05;
+        requestAnimationFrame(draw);
+      }
+
+      draw();
+    }
+  </script>
 </body>
 </html>

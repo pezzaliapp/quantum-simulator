@@ -2,45 +2,56 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-    <meta charset="UTF-8">
-    <title>Esperimento della Doppia Fenditura</title>
-    <style>
-        body {
-            background-color: black;
-            color: white;
-            font-family: monospace;
-            text-align: center;
-        }
-        canvas {
-            background: black;
-            display: block;
-            margin: 20px auto;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <title>Esperimento della Doppia Fenditura</title>
+  <style>
+    body { background-color: black; color: lime; font-family: monospace; text-align: center; }
+    input, button { margin: 0.5rem; font-size: 1rem; }
+    canvas { background: black; display: block; margin: auto; }
+    .menu-button {
+      background: white; color: black; font-weight: bold;
+      padding: 0.5em 1em; margin-top: 1em; border-radius: 5px;
+    }
+  </style>
 </head>
 <body>
-    <h1>🌌 Esperimento della Doppia Fenditura</h1>
-    <label>Numero di Particelle: <input type="number" id="num" value="1000"></label>
-    <button onclick="simula()">▶️ Avvia</button>
-    <canvas id="canvas" width="600" height="300"></canvas>
-    <button onclick="window.location.href='index.html'">⬅️ Menu Principale</button>
-    <script>
-        const canvas = document.getElementById("canvas");
-        const ctx = canvas.getContext("2d");
+  <h1>🧬 <span style="color:lime">Esperimento della Doppia Fenditura</span></h1>
 
-        function simula() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            const num = parseInt(document.getElementById("num").value);
-            const heights = Array(canvas.width).fill(0);
-            for (let i = 0; i < num; i++) {
-                const x = Math.floor(canvas.width / 2 + Math.sin(i) * 200 * Math.sin(i / 10));
-                if (x >= 0 && x < canvas.width) heights[x]++;
-            }
-            ctx.fillStyle = "lime";
-            for (let x = 0; x < canvas.width; x++) {
-                ctx.fillRect(x, canvas.height, 1, -heights[x]);
-            }
+  <label>Numero di Particelle: <input id="n" type="number" value="5000" min="1"></label>
+  <button onclick="startInterference()">▶️ Avvia</button>
+
+  <canvas id="canvas" width="800" height="300"></canvas>
+  <br>
+  <a href="index.html"><button class="menu-button">⬅ Menu Principale</button></a>
+
+  <script>
+    function startInterference() {
+      const canvas = document.getElementById('canvas');
+      const ctx = canvas.getContext('2d');
+      const n = parseInt(document.getElementById('n').value);
+      const data = new Array(canvas.width).fill(0);
+      let i = 0;
+
+      function step() {
+        if (i >= n) return;
+        const x = Math.floor(Math.random() * canvas.width);
+        const angle = (x / canvas.width) * Math.PI * 4;
+        const intensity = Math.pow(Math.cos(angle), 2);
+        data[x] += intensity;
+
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = 'lime';
+        for (let j = 0; j < canvas.width; j++) {
+          const h = Math.min(canvas.height, data[j]);
+          ctx.fillRect(j, canvas.height - h, 1, h);
         }
-    </script>
+
+        i++;
+        requestAnimationFrame(step);
+      }
+
+      step();
+    }
+  </script>
 </body>
 </html>
