@@ -33,13 +33,25 @@ function loadExperiment(type) {
     wrapper.style.margin = "40px auto";
     wrapper.style.position = "relative";
 
+    const glow = document.createElement("div");
+    glow.style.width = "220px";
+    glow.style.height = "220px";
+    glow.style.borderRadius = "50%";
+    glow.style.background = "radial-gradient(circle, rgba(0,255,255,0.2) 0%, rgba(0,255,255,0) 70%)";
+    glow.style.position = "absolute";
+    glow.style.top = "-10px";
+    glow.style.left = "-10px";
+    glow.style.zIndex = "0";
+    glow.style.animation = "pulseGlow 2s infinite";
+
     const wheel = document.createElement("div");
     wheel.style.width = "100%";
     wheel.style.height = "100%";
     wheel.style.border = "10px solid #4CAF50";
     wheel.style.borderRadius = "50%";
-    wheel.style.transition = "transform 0.05s linear";
     wheel.style.position = "absolute";
+    wheel.style.transition = "transform 0.1s linear";
+    wheel.style.zIndex = "1";
 
     const arrow = document.createElement("div");
     arrow.style.width = "0";
@@ -50,6 +62,7 @@ function loadExperiment(type) {
     arrow.style.position = "absolute";
     arrow.style.top = "-30px";
     arrow.style.left = "calc(50% - 10px)";
+    arrow.style.zIndex = "2";
 
     const directionLabel = document.createElement("p");
     directionLabel.style.textAlign = "center";
@@ -57,6 +70,7 @@ function loadExperiment(type) {
     directionLabel.style.fontWeight = "bold";
     directionLabel.style.marginTop = "220px";
 
+    wrapper.appendChild(glow);
     wrapper.appendChild(wheel);
     wrapper.appendChild(arrow);
     area.appendChild(wrapper);
@@ -64,21 +78,28 @@ function loadExperiment(type) {
 
     let angle = 0;
     let dir = 1;
+    let speed = 1;
 
     function updateLabel() {
       directionLabel.textContent = dir === 1 ? "↻ Direzione: Destra" : "↺ Direzione: Sinistra";
     }
 
+    function animate() {
+      angle += dir * speed;
+      wheel.style.transform = `rotate(${angle}deg)`;
+      requestAnimationFrame(animate);
+    }
+
     updateLabel();
+    animate();
 
     setInterval(() => {
-      angle += dir * 10;
       if (Math.random() < 0.2) {
         dir *= -1;
         updateLabel();
       }
-      wheel.style.transform = `rotate(${angle}deg)`;
-    }, 100);
+      speed = 1 + Math.random() * 4;
+    }, 1500);
   }
 
   if (type === "probability") {
