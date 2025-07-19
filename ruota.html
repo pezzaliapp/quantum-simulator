@@ -1,22 +1,27 @@
 <!DOCTYPE html>
+
 <html lang="it">
 <head>
-  <meta charset="UTF-8">
-  <title>Ruota Quantistica</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="style.css">
+<meta charset="utf-8"/>
+<title>Ruota Quantistica</title>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="style.css" rel="stylesheet"/>
 </head>
 <body>
-  <h1>Ruota Quantistica</h1>
-  <canvas id="wheelCanvas" width="200" height="200"></canvas>
-  <br>
-  <button onclick="spinWheel()">Lancia Spin</button>
-  <p id="resultText">Risultato: —</p>
-  <p class="descrizione">
+<h1>Ruota Quantistica</h1>
+<div style="margin-bottom: 1em;">
+<label for="spinProbability">Probabilità di Spin Up (0–1): </label>
+<input id="spinProbability" max="1" min="0" step="0.01" type="number" value="0.5"/>
+<button onclick="avviaRuota()">▶ Lancia Ruota</button>
+</div><canvas height="200" id="wheelCanvas" width="200"></canvas>
+<br/>
+<button onclick="spinWheel()">Lancia Spin</button>
+<p id="resultText">Risultato: —</p>
+<p class="descrizione">
     Questa simulazione rappresenta lo spin di una particella come una ruota che ruota e si ferma su "Up" o "Down", 
     modellando la quantizzazione dello spin osservata negli esperimenti di Stern–Gerlach.
   </p>
-  <a class="button" href="index.html">⬅ Menu Principale</a>
-  <script src="wheel.js"></script>
+<a class="button" href="index.html">⬅ Menu Principale</a>
+<script src="wheel.js"></script>
 </body>
 </html>
