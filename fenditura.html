@@ -1,19 +1,42 @@
 <!DOCTYPE html>
+
 <html lang="it">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Doppia Fenditura</title>
-  <link rel="stylesheet" href="style.css">
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Doppia Fenditura</title>
+<link href="style.css" rel="stylesheet"/>
 </head>
 <body>
-  <div class="container">
-    <h2>Esperimento della Doppia Fenditura</h2>
-    <canvas id="fendituraCanvas" width="300" height="200"></canvas>
-    <p>La simulazione mostra una particella (pallina) che attraversa due fenditure, generando un'interferenza come previsto dalla meccanica quantistica. Si basa sul principio di sovrapposizione d'onda e sulla formula di probabilità dell'interferenza: <strong>P(x) = |ψ₁(x) + ψ₂(x)|²</strong>.</p>
-    <a href="index.html" class="button">🔙 Menu Principale</a>
-  </div>
-  <script>
+<div class="container">
+<h2>Esperimento della Doppia Fenditura</h2>
+<div style="margin-bottom: 1em;">
+<label for="particleCount">Numero particelle (es. 1000): </label>
+<input id="particleCount" max="10000" min="100" step="100" type="number" value="1000"/>
+<label for="slitDistance">Distanza tra fenditure (es. 10): </label>
+<input id="slitDistance" max="50" min="1" step="1" type="number" value="10"/>
+<label for="wavelength">Lunghezza d’onda (es. 5): </label>
+<input id="wavelength" max="100" min="1" step="1" type="number" value="5"/>
+<button onclick="lanciaFenditura()">▶ Lancia Esperimento</button>
+</div><canvas height="200" id="fendituraCanvas" width="300"></canvas>
+<p>La simulazione mostra una particella (pallina) che attraversa due fenditure, generando un'interferenza come previsto dalla meccanica quantistica. Si basa sul principio di sovrapposizione d'onda e sulla formula di probabilità dell'interferenza: <strong>P(x) = |ψ₁(x) + ψ₂(x)|²</strong>.</p>
+<a class="button" href="index.html">🔙 Menu Principale</a>
+</div>
+<script>function getUserInputs() {
+  const count = parseInt(document.getElementById('particleCount').value);
+  const distance = parseFloat(document.getElementById('slitDistance').value);
+  const wavelength = parseFloat(document.getElementById('wavelength').value);
+  return { count, distance, wavelength };
+}
+
+function lanciaFenditura() {
+  const { count, distance, wavelength } = getUserInputs();
+  // Simula esperimento con questi parametri
+  console.log('Lancio esperimento con:', count, distance, wavelength);
+  // TODO: Inserire simulazione reale qui
+}
+
+
     const canvas = document.getElementById("fendituraCanvas");
     const ctx = canvas.getContext("2d");
 
