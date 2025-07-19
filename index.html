@@ -1,0 +1,22 @@
+
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Simulatore Quantistico</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <h1>Simulatore Quantistico</h1>
+  <p>Scegli un esperimento:</p>
+  <select id="simSelect" onchange="changeSimulation()">
+    <option value="doubleSlit">Doppia Fenditura</option>
+    <option value="spinWheel">Ruota Quantistica</option>
+    <option value="probability">Probabilità Quantistica</option>
+  </select>
+  <div id="simContainer"></div>
+
+  <script src="simulatore.js"></script>
+</body>
+</html>
