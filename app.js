@@ -1,148 +1,35 @@
 
-function loadExperiment(type) {
-  const area = document.getElementById("experimentArea");
-  area.innerHTML = "";
-
-  if (type === "doubleSlit") {
-    const canvas = document.createElement("canvas");
-    canvas.width = 600;
-    canvas.height = 200;
-    area.appendChild(canvas);
-    const ctx = canvas.getContext("2d");
-    let t = 0;
-    function draw() {
-      ctx.fillStyle = "black";
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-      for (let x = 0; x < canvas.width; x++) {
-        const wave1 = Math.sin((x + t) * 0.05);
-        const wave2 = Math.sin((x - t) * 0.05);
-        const intensity = Math.floor(128 + 127 * (wave1 + wave2) / 2);
-        ctx.fillStyle = `rgb(${intensity},${intensity},255)`;
-        ctx.fillRect(x, 50, 1, 100);
+const ctx = document.getElementById('graficoProbabilità').getContext('2d');
+const labels = ['Spin Destra', 'Spin Sinistra'];
+const data = {
+  labels: labels,
+  datasets: [{
+    label: 'Frequenza',
+    data: [0, 0],
+    backgroundColor: ['#00ffaa', '#ff0066'],
+    borderWidth: 1
+  }]
+};
+const config = {
+  type: 'bar',
+  data: data,
+  options: {
+    animation: false,
+    scales: {
+      y: {
+        beginAtZero: true
       }
-      t += 2;
-      requestAnimationFrame(draw);
     }
-    draw();
   }
+};
+const grafico = new Chart(ctx, config);
 
-  if (type === "spinWheel") {
-    runSpinWheel(area);
-  }
+let conteggi = [0, 0];
 
-  if (type === "probability") {
-    const result = document.createElement("p");
-    result.style.fontSize = "20px";
-    result.style.fontWeight = "bold";
-    result.style.color = "#333";
-
-    const button = document.createElement("button");
-    button.textContent = "🎲 Lancia particella";
-    button.style.fontSize = "18px";
-    button.style.padding = "10px 20px";
-    button.style.marginTop = "20px";
-
-    const stateBox = document.createElement("div");
-    stateBox.style.width = "100px";
-    stateBox.style.height = "100px";
-    stateBox.style.margin = "20px auto";
-    stateBox.style.border = "3px dashed #555";
-
-    button.onclick = () => {
-      const r = Math.random();
-      if (r < 0.3) {
-        result.textContent = "🟢 Stato |0⟩ rilevato (30%)";
-        stateBox.style.backgroundColor = "#4CAF50";
-      } else if (r < 0.8) {
-        result.textContent = "🔵 Stato |1⟩ rilevato (50%)";
-        stateBox.style.backgroundColor = "#2196F3";
-      } else {
-        result.textContent = "⚫ Superposizione persa (20%)";
-        stateBox.style.backgroundColor = "#999";
-      }
-    };
-
-    area.appendChild(button);
-    area.appendChild(stateBox);
-    area.appendChild(result);
-  }
-}
-
-function runSpinWheel(area) {
-  const wrapper = document.createElement("div");
-  wrapper.style.width = "200px";
-  wrapper.style.height = "200px";
-  wrapper.style.margin = "40px auto";
-  wrapper.style.position = "relative";
-
-  const glow = document.createElement("div");
-  glow.style.width = "240px";
-  glow.style.height = "240px";
-  glow.style.borderRadius = "50%";
-  glow.style.background = "rgba(0, 255, 255, 0.2)";
-  glow.style.position = "absolute";
-  glow.style.top = "-20px";
-  glow.style.left = "-20px";
-  glow.style.zIndex = "0";
-  glow.style.boxShadow = "0 0 30px 15px rgba(0, 255, 255, 0.4)";
-  glow.style.filter = "blur(10px)";
-  glow.style.animation = "pulseGlow 2s ease-in-out infinite";
-
-  const wheel = document.createElement("div");
-  wheel.style.width = "100%";
-  wheel.style.height = "100%";
-  wheel.style.border = "10px solid #4CAF50";
-  wheel.style.borderRadius = "50%";
-  wheel.style.position = "absolute";
-  wheel.style.transition = "transform 0.1s linear";
-  wheel.style.zIndex = "1";
-  wheel.style.backgroundColor = "#fff";
-
-  const arrow = document.createElement("div");
-  arrow.style.width = "0";
-  arrow.style.height = "0";
-  arrow.style.borderLeft = "10px solid transparent";
-  arrow.style.borderRight = "10px solid transparent";
-  arrow.style.borderBottom = "20px solid #000";
-  arrow.style.position = "absolute";
-  arrow.style.top = "-30px";
-  arrow.style.left = "calc(50% - 10px)";
-  arrow.style.zIndex = "2";
-
-  const directionLabel = document.createElement("p");
-  directionLabel.style.textAlign = "center";
-  directionLabel.style.fontSize = "18px";
-  directionLabel.style.fontWeight = "bold";
-  directionLabel.style.marginTop = "220px";
-
-  wrapper.appendChild(glow);
-  wrapper.appendChild(wheel);
-  wrapper.appendChild(arrow);
-  area.appendChild(wrapper);
-  area.appendChild(directionLabel);
-
-  let angle = 0;
-  let dir = 1;
-  let speed = 1;
-
-  function updateLabel() {
-    directionLabel.textContent = dir === 1 ? "↻ Direzione: Destra" : "↺ Direzione: Sinistra";
-  }
-
-  function animate() {
-    angle += dir * speed;
-    wheel.style.transform = `rotate(${angle}deg)`;
-    requestAnimationFrame(animate);
-  }
-
-  updateLabel();
-  animate();
-
-  setInterval(() => {
-    if (Math.random() < 0.2) {
-      dir *= -1;
-      updateLabel();
-    }
-    speed = 1 + Math.random() * 4;
-  }, 1500);
-}
+document.getElementById('btnLancio').addEventListener('click', () => {
+  const risultato = Math.random() < 0.5 ? 0 : 1;
+  conteggi[risultato]++;
+  document.getElementById('esito').textContent = 'Esito: ' + labels[risultato];
+  grafico.data.datasets[0].data = conteggi;
+  grafico.update();
+});

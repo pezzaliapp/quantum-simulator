@@ -4,21 +4,18 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>QuantumLab</title>
+  <title>Probabilità Quantistica</title>
   <link rel="stylesheet" href="style.css" />
-  <link rel="manifest" href="manifest.json" />
 </head>
 <body>
-  <header>
-    <h1>QuantumLab – Simulatore Quantistico</h1>
-    <p>Esplora esperimenti interattivi: doppia fenditura, ruota quantistica, probabilità quantistica.</p>
-    <nav>
-      <button onclick="loadExperiment('doubleSlit')">Doppia Fenditura</button>
-      <button onclick="loadExperiment('spinWheel')">Ruota Quantistica</button>
-      <button onclick="loadExperiment('probability')">Probabilità</button>
-    </nav>
-  </header>
-  <main id="experimentArea"></main>
+  <div class="container">
+    <h1>QuantumLab – Esperimento di Probabilità</h1>
+    <p>Clicca il pulsante per lanciare una particella quantistica e osserva l'esito!</p>
+    <button id="btnLancio">🎲 Lancia!</button>
+    <div id="esito" class="esito">Esito: —</div>
+    <canvas id="graficoProbabilità"></canvas>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="app.js"></script>
 </body>
 </html>
