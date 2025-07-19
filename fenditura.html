@@ -1,57 +1,32 @@
-
 <!DOCTYPE html>
 <html lang="it">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Esperimento della Doppia Fenditura</title>
-  <style>
-    body {
-      background-color: black;
-      color: lime;
-      font-family: 'Courier New', monospace;
-      text-align: center;
-    }
-    canvas {
-      border: 1px solid lime;
-      margin-top: 20px;
-      background-color: black;
-    }
-    input, button {
-      margin: 5px;
-      font-size: 16px;
-      padding: 5px;
-      font-family: 'Courier New', monospace;
-    }
-  </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Doppia Fenditura</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h1>🧬 Esperimento della Doppia Fenditura</h1>
-  <label>Numero di Particelle: <input type="number" id="nParticelle" value="1000" step="100"></label>
-  <button onclick="simula()">▶ Avvia</button>
-  <canvas id="canvas" width="600" height="300"></canvas><br>
-  <button onclick="location.href='index.html'">⬅ Menu Principale</button>
+  <div class="container">
+    <h2>Esperimento della Doppia Fenditura</h2>
+    <canvas id="fendituraCanvas" width="300" height="200"></canvas>
+    <p>La simulazione mostra una particella (pallina) che attraversa due fenditure, generando un'interferenza come previsto dalla meccanica quantistica. Si basa sul principio di sovrapposizione d'onda e sulla formula di probabilità dell'interferenza: <strong>P(x) = |ψ₁(x) + ψ₂(x)|²</strong>.</p>
+    <a href="index.html" class="button">🔙 Menu Principale</a>
+  </div>
   <script>
-    function simula() {
-      const canvas = document.getElementById("canvas");
-      const ctx = canvas.getContext("2d");
-      const N = parseInt(document.getElementById("nParticelle").value);
+    const canvas = document.getElementById("fendituraCanvas");
+    const ctx = canvas.getContext("2d");
+
+    function drawParticle() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-      const data = new Array(canvas.width).fill(0);
-      for (let i = 0; i < N; i++) {
-        const x = Math.floor(canvas.width / 2 + Math.sin(i / 20) * canvas.width / 4 * Math.random());
-        data[x]++;
-      }
-      let i = 0;
-      function draw() {
-        if (i >= canvas.width) return;
-        ctx.fillStyle = "lime";
-        ctx.fillRect(i, canvas.height, 1, -data[i] / 2);
-        i++;
-        requestAnimationFrame(draw);
-      }
-      draw();
+      const y = Math.random() * canvas.height;
+      ctx.beginPath();
+      ctx.arc(canvas.width / 2, y, 4, 0, Math.PI * 2);
+      ctx.fillStyle = "cyan";
+      ctx.fill();
     }
+
+    setInterval(drawParticle, 600);
   </script>
 </body>
 </html>
