@@ -1,27 +1,39 @@
-
 body {
-  background-color: #111;
-  color: #f0f0f0;
-  font-family: sans-serif;
+  font-family: system-ui, sans-serif;
+  background: #f0f0f0;
+  margin: 0;
+  padding: 0;
+}
+.header {
+  background: #111;
+  color: white;
   text-align: center;
-  padding: 30px;
+  padding: 2em 1em;
+}
+.buttons {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1em;
+  margin-top: 2em;
 }
 button {
-  font-size: 1.5rem;
-  padding: 10px 30px;
-  background: #00ffaa;
+  font-size: 1.1em;
+  padding: 1em;
   border: none;
   border-radius: 8px;
+  background: #222;
+  color: white;
   cursor: pointer;
+  width: 90%;
+  max-width: 400px;
+  transition: background 0.3s;
 }
 button:hover {
-  background: #00cc88;
+  background: #444;
 }
-.esito {
-  font-size: 2rem;
-  margin-top: 20px;
-}
-canvas {
-  margin-top: 40px;
-  max-width: 600px;
+small {
+  display: block;
+  font-size: 0.8em;
+  color: #ccc;
 }
